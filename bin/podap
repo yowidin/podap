@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+
+from podap.view.app import PodapApp
+from podap.config import Config
+from sys import stderr
+
+
+def main():
+    try:
+        Config.INSTANCE = Config.from_args()
+        PodapApp.run()
+    except Exception as e:
+        print(e, file=stderr)
+
+
+if __name__ == '__main__':
+    main()
