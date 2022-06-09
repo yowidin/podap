@@ -8,7 +8,7 @@ from podap.config import Config
 from podap.view.tasks_view import TasksView
 
 from PySide6.QtCore import QTimer, Qt, QPoint, QSettings
-from PySide6.QtWidgets import QApplication, QHBoxLayout, QVBoxLayout, QMainWindow, QWidget
+from PySide6.QtWidgets import QApplication, QHBoxLayout, QMainWindow, QWidget, QSizePolicy
 
 
 class MainWindow(QMainWindow):
@@ -22,15 +22,12 @@ class MainWindow(QMainWindow):
 
         self.quick_access = QuickAccess(self.model)
         self.quick_access.collape_tasks.connect(self.update_tasks_visibility)
+        self.quick_access.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         self.quick_access.should_close.connect(self.handle_close)
 
-        self.left_column = QVBoxLayout()
-        self.left_column.addWidget(self.quick_access)
-        self.left_column.addStretch()
-        self.left_column.setContentsMargins(0, 0, 0, 0)
-
-        self.right_column = TasksView(model)
-        self.right_column.error_message.clicked.connect(self.error_message_clicked)
+        self.task_view = TasksView(model)
+        self.task_view.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        self.task_view.error_message.clicked.connect(self.error_message_clicked)
 
         self.borderless = Config.INSTANCE.borderless
         self.dragging = False
@@ -38,8 +35,8 @@ class MainWindow(QMainWindow):
         self.collapsed = False
 
         main_layout = QHBoxLayout()
-        main_layout.addLayout(self.left_column)
-        main_layout.addWidget(self.right_column)
+        main_layout.addWidget(self.quick_access)
+        main_layout.addWidget(self.task_view)
         main_layout.setContentsMargins(2, 0, 2, 0)
 
         # Workaround main window already having a layout
@@ -112,7 +109,7 @@ class MainWindow(QMainWindow):
         else:
             shrink = self.shrink_to_old_width
 
-        self.right_column.setVisible(not should_hide)
+        self.task_view.setVisible(not should_hide)
 
         # Note: see error_message_clicked for description
         QTimer.singleShot(0, shrink)

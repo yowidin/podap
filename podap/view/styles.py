@@ -4,4 +4,3 @@ SMALL_LABEL_STYLE = 'font-weight: bold; font-size: 10pt'
 BIG_LABEL_STYLE = 'font-weight: bold; font-size: 16pt'
 DEFAULT_BOLD_STYLE = 'font-weight: bold'
 DEFAULT_STYLE = 'font-weight: regular'
-

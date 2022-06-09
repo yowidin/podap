@@ -2,12 +2,14 @@ from typing import List
 
 from PySide6.QtCore import QTimer, Qt
 from PySide6.QtGui import QPalette, QColor
-from PySide6.QtWidgets import QLabel
 
 from datetime import datetime
 
+from podap.view.scalable_label import ScalableLabel
 
-class CurrentTask(QLabel):
+
+class CurrentTask(ScalableLabel):
+    """ Displays the current task and flashes with warning_colors at the given blink_minutes """
 
     def __init__(self, text: str, blink_minutes: List[int] = None, warning_colors: List[int] = None, *args, **kwargs):
         super().__init__(text, *args, **kwargs)

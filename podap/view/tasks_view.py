@@ -1,10 +1,11 @@
 from datetime import datetime
 
 from PySide6.QtCore import Signal, QTimer
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout
+from PySide6.QtWidgets import QWidget, QVBoxLayout
 
 from podap.model import Model, DayOfWeek
-from podap.view import ErrorMessage, CurrentTask, BIG_LABEL_STYLE, SMALL_LABEL_STYLE
+from podap.view import ErrorMessage, CurrentTask
+from podap.view.scalable_label import ScalableLabel
 
 
 class TasksView(QWidget):
@@ -23,24 +24,11 @@ class TasksView(QWidget):
         self.layout.addWidget(self.error_message)
 
         self.current_task = CurrentTask('???')
-        self.current_task.setStyleSheet(BIG_LABEL_STYLE)
+        self.current_task.set_bold(True)
         self.layout.addWidget(self.current_task)
 
-        second_row = QHBoxLayout()
-        second_row.addSpacing(45)
-
-        self.next_task = QLabel('???')
-        self.next_task.setStyleSheet(SMALL_LABEL_STYLE)
-        second_row.addWidget(self.next_task)
-
-        self.current_time = QLabel('???')
-        self.current_time.setStyleSheet(SMALL_LABEL_STYLE)
-        second_row.addWidget(self.current_time)
-
-        second_row.addStretch()
-        second_row.setContentsMargins(0, 0, 0, 0)
-
-        self.layout.addLayout(second_row)
+        self.next_task = ScalableLabel('???')
+        self.layout.addWidget(self.next_task)
 
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_tasks)
@@ -78,8 +66,9 @@ class TasksView(QWidget):
             day_number = DayOfWeek.from_date_time(date).value[0]
 
             self.current_task.setText(current_entry.title)
-            self.next_task.setText(f'{day_number}Next: {next_entry.title}')
 
-            self.current_time.setText(f'{date.hour:02}:{date.minute:02}:{date.second:02}')
+            task = f'{day_number}Next: {next_entry.title}'
+            time = f'{date.hour:02}:{date.minute:02}:{date.second:02}'
+            self.next_task.setText(f'{task} {time}')
         except ValueError as e:
             self.model_error.emit(str(e))

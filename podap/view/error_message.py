@@ -1,9 +1,10 @@
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QPalette, QColor
-from PySide6.QtWidgets import QLabel
+
+from podap.view.scalable_label import ScalableLabel
 
 
-class ErrorMessage(QLabel):
+class ErrorMessage(ScalableLabel):
     clicked = Signal()
 
     def __init__(self, *args, **kwargs):
