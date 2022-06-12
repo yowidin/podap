@@ -63,11 +63,11 @@ class TasksView(QWidget):
             next_entry = self.model.get_pending_task()
 
             date = datetime.now()
-            day_number = DayOfWeek.from_date_time(date).value[0]
+            # day_number = DayOfWeek.from_date_time(date).value[0]
 
             self.current_task.setText(current_entry.title)
 
-            task = f'{day_number}Next: {next_entry.title}'
+            task = f'Next: {next_entry.title}'
             time = f'{date.hour:02}:{date.minute:02}:{date.second:02}'
             self.next_task.setText(f'{task} {time}')
         except ValueError as e:

@@ -31,7 +31,7 @@ class MainWindow(QMainWindow):
 
         self.borderless = Config.INSTANCE.borderless
         self.dragging = False
-        self.old_width = self.width()
+        self.old_size = self.size()
         self.collapsed = False
 
         main_layout = QHBoxLayout()
@@ -62,8 +62,8 @@ class MainWindow(QMainWindow):
     def shrink_horizontally(self):
         self.resize(self.minimumSizeHint().width(), self.height())
 
-    def shrink_to_old_width(self):
-        self.resize(self.old_width, self.minimumSizeHint().height())
+    def shrink_to_old_size(self):
+        self.resize(self.old_size)
 
     def _make_always_on_top(self):
         flags = self.windowFlags()
@@ -104,10 +104,10 @@ class MainWindow(QMainWindow):
     def update_tasks_visibility(self, should_hide: bool):
         self.collapsed = should_hide
         if should_hide:
-            self.old_width = self.width()
+            self.old_size = self.size()
             shrink = self.shrink_horizontally
         else:
-            shrink = self.shrink_to_old_width
+            shrink = self.shrink_to_old_size
 
         self.task_view.setVisible(not should_hide)
 
@@ -129,7 +129,7 @@ class MainWindow(QMainWindow):
         settings.setValue('geometry', self.saveGeometry())
         settings.setValue('state', self.saveState(self.UI_VERSION))
         settings.setValue('collapsed', self.collapsed)
-        settings.setValue('old_width', self.old_width)
+        settings.setValue('old_size', self.old_size)
 
     def _restore_position(self):
         settings = self.make_settings()
@@ -141,7 +141,11 @@ class MainWindow(QMainWindow):
         if self.collapsed:
             self.update_tasks_visibility(True)
 
-        self.old_width = settings.value('old_width', None)
+        self.old_size = settings.value('old_size', None)
+
+    # def do_save_image(self):
+    #     # NOTE: Reference for saving UI as an image
+    #     self.grab().save('screen.png')
 
 
 class PodapApp:
