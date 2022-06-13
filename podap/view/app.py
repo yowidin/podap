@@ -130,6 +130,7 @@ class MainWindow(QMainWindow):
         settings.setValue('state', self.saveState(self.UI_VERSION))
         settings.setValue('collapsed', self.collapsed)
         settings.setValue('old_size', self.old_size)
+        settings.setValue('borderless', self.borderless)
 
     def _restore_position(self):
         settings = self.make_settings()
@@ -142,6 +143,7 @@ class MainWindow(QMainWindow):
             self.update_tasks_visibility(True)
 
         self.old_size = settings.value('old_size', None)
+        self.borderless = settings.value('borderless', False)
 
     # def do_save_image(self):
     #     # NOTE: Reference for saving UI as an image

@@ -20,7 +20,7 @@ def read_requirements(path: str) -> List[str]:
 
 setup(
     name='podap',
-    version='0.0.2',
+    version='0.0.3',
     description='Pomodoro Day Planner',
     url='',
     author='Dennis Sitelew',

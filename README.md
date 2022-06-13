@@ -28,3 +28,11 @@ Just start the app, passing working directory as a command line argument:
 ```bash
 % podap -wd ./path/to/working/directory
 ```
+
+# Building a standalone app
+
+Install and run `pyinstall` from a virtual environment
+```bash
+% pyinstaller -y --clean ./podap.spec
+```
+

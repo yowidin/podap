@@ -1,5 +1,6 @@
 import argparse
 import os
+import sys
 from typing import Optional
 
 
@@ -13,10 +14,21 @@ class Config:
         self.borderless = borderless
 
     @staticmethod
+    def _get_default_working_dir():
+        binary_dir = os.path.dirname(sys.argv[0])
+        if sys.platform == 'darwin' and 'Contents/MacOS' in binary_dir:
+            # We are inside an macOS bundles
+            binary_dir = os.path.abspath(os.path.join(binary_dir, '..', '..', '..'))
+            pass
+        return os.path.join(binary_dir, 'input')
+
+    @staticmethod
     def from_args() -> 'Config':
         parser = argparse.ArgumentParser(description='Pomodoro Day Planner (podap)')
-        parser.add_argument('--working-directory', '-wd', type=str, required=False, default=os.getcwd(),
-                            help='Working directory, containing a list of text files, each containing the day '
+        parser.add_argument('--working-directory', '-wd', type=str, required=False,
+                            default=Config._get_default_working_dir(),
+                            help='Working directory, containing a list of text files, '
+                                 'each containing the day '
                                  'schedule (e.g: 0_mo.txt)')
         parser.add_argument('--pause-duration', '-pd', type=int, required=False, default=15,
                             help='Pause duration, in minutes. The app is currently supports only the hourly regime!')
